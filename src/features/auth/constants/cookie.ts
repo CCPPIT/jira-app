@@ -1,0 +1,1 @@
+export const AUTHCOOKIE="ccpp-jira-clone-session"
