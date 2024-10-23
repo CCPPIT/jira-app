@@ -1,36 +1,55 @@
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-type Props = {
+interface Props  {
     className?:string
     color?:string
     height?:string
     dotSize?:string
     gapSize?:string
-    direction?:"horizontal"|"vertical"
+    direction?:"horizontal" | "vertical"
 }
 
-const DottedSeparator = ({className,color="#d5d",direction="horizontal",dotSize="5px",gapSize="10px",height="2px"}: Props) => {
-    const isHorizantal=direction ==="horizontal"
+const DottedSeparator = ({className,
+    color = "#d4d4d8",
+    direction = "horizontal", 
+    dotSize = "2px",gapSize = "6px", height = "2px"}: Props) => {
+    const isHorizontal = direction === "horizontal"
+    const styles={
+        dot:{
+            width: isHorizontal ? '100%' : height,
+            height: isHorizontal ? height : '100%',
+            backgroundImage:`radial-gradient(circle, ${color} 25%, transparent 25% )`,
+            backgroundSize: isHorizontal
+            ? `${parseInt(dotSize)+parseInt(gapSize)} px ${height}`
+            : `${height} ${parseInt(dotSize)+parseInt(gapSize)}px`,
+            backgroundRepeat:isHorizontal ? "repeat-x" : "repeat-y",
+            backgroundPosition:"center"
+
+        }
+    }
   return (
     <div 
     className={cn(
-        isHorizantal?"w-full flex items-center":"h-full flex flex-col items-center",
+        isHorizontal ? "w-full flex items-center" : "h-full flex flex-col items-center",
         className
     )}
+    
     >
-        <div className={isHorizantal? "flex-grow" :"flex-grow-0"}
-        style={{
-            width:isHorizantal ? "100%" : height,
-            height:isHorizantal? height :"100%",
-            backgroundImage:`radial-gradient(circle,${color} 25%, transparent 25%)`,
-            backgroundSize:isHorizantal
-            ?`${parseInt(dotSize) + parseInt(gapSize)} px ${height}`
-            :`${height} ${parseInt(dotSize) + parseInt(gapSize)} px `,
-            backgroundRepeat:isHorizantal? 'repeat-x': 'repeat-y',
-            backgroundPosition:"center"
-        }}
+        <div className={isHorizontal ? "flex-grow" : "flex-grow-0"}
+        style={styles.dot}
+        // style={{
+        //     width: isHorizontal ? "100%" : height,
+        //     height: isHorizontal ? height : "100%",
+        //     backgroundImage:`radial-gradient(circle, ${color} 25%, transparent 25% )`,
+        //     backgroundSize: isHorizontal
+        //     ? `${parseInt(dotSize) + parseInt(gapSize)} px ${height}`
+        //     : `${height} ${parseInt(dotSize) + parseInt(gapSize)}px`,
+        //     backgroundRepeat:isHorizontal ? "repeat-x" : "repeat-y",
+        //     backgroundPosition:"center"
+        // }}
         />
+        
     </div>
   )
 }
