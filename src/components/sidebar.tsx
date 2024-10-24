@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Separator } from './ui/separator'
 import Navigation from './navigation'
+import WorkspaceSwitcher from './workspace-switcher'
 
 type Props = {}
 
@@ -18,6 +19,8 @@ const SideBar = (props: Props) => {
         </div>
        
         </Link>
+        <Separator className='my-4 border-s border-dotted'/>
+        <WorkspaceSwitcher/>
         <Separator className='my-4 border-dotted'/>
         <Navigation/>
 
