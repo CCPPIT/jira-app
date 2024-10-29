@@ -31,11 +31,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+   
+
+   
     <html lang="en">
       <body
         className={cn(inter.className,"antialiased min-h-screen")}
       >
         <QueryProvider>
+
           <Toaster/>
         {children}
 
@@ -43,5 +47,6 @@ export default function RootLayout({
        
       </body>
     </html>
+   
   );
 }

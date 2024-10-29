@@ -21,7 +21,7 @@ export const useCreateWorkspace=()=>{
             if(!response.ok){
                 throw new Error("Failed to create workspace")
             }
-            return response.json()
+            return  await response.json()
         },
         onSuccess:()=>{
             toast.success("Workspaces created")

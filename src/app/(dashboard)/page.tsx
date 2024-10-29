@@ -1,8 +1,8 @@
 //"use client"
 import { Button } from "@/components/ui/button";
-import { getCurrent } from "@/features/auth/actions";
+import { getCurrent } from "@/features/auth/queries";
 import { useLogout } from "@/features/auth/api/use-logout";
-import { getWorkspaces } from "@/features/workspaces/actions";
+import { getWorkspaces } from "@/features/workspaces/queries";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 

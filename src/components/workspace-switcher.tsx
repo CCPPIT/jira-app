@@ -6,8 +6,8 @@ import {RiAddCircleFill}from "react-icons/ri"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select'
 import WorkspaceAvatar from '@/features/workspaces/components/workspace-avatar'
 import { useRouter } from 'next/navigation'
-import { useWorkspaceId } from '@/hooks/use-workspace-id'
-import { useCreateWorkspaceModal } from '@/hooks/use-create-workspace-modal'
+import { useWorkspaceId } from '@/features/workspaces/hooks/use-workspace-id'
+import { useCreateWorkspaceModal } from '@/features/workspaces/hooks/use-create-workspace-modal'
 
 type Props = {}
 

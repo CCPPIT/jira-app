@@ -1,15 +1,22 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 import { Button } from './ui/button'
 import { MenuIcon } from 'lucide-react'
 import SideBar from './sidebar'
+import { usePathname } from 'next/navigation'
 
 type Props = {}
 
 const MobilSideBar = (props: Props) => {
+    const [isOpen,setIsOpen]=useState(false);
+    const pathName=usePathname()
+    useEffect(()=>{
+        setIsOpen(false)
+
+    },[pathName])
   return (
-    <Sheet modal={false}>
+    <Sheet modal={false} open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
             <Button size={"icon"} variant={"secondary"} className='lg:hidden'>
                 <MenuIcon className='size-4 text-neutral-500'/>
