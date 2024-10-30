@@ -4,6 +4,7 @@ import React from 'react'
 import { Separator } from './ui/separator'
 import Navigation from './navigation'
 import WorkspaceSwitcher from './workspace-switcher'
+import Projects from './projects'
 
 type Props = {}
 
@@ -23,6 +24,9 @@ const SideBar = (props: Props) => {
         <WorkspaceSwitcher/>
         <Separator className='my-4 border-dotted'/>
         <Navigation/>
+        <Separator className='my-4 border-dotted'/>
+        <Projects/>
+
 
     </aside>
   ) 

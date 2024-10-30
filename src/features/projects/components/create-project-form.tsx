@@ -1,47 +1,50 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { createWorkspaceSchema } from "../schemas"
+import { createProjectSchema } from "../schemas"
 import { z } from "zod"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
-import { useCreateWorkspace } from "../api/use-create-workspace";
 import { useRef } from "react";
 import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImageIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
+import { useCreateProject } from "../api/use-create-project";
+import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 
-interface CreateWorkspaceFormProps{
+interface CreateProjectFormProps{
     onCancel?:()=>void
 }
-export const CreateWorkspaceForm=({onCancel}:CreateWorkspaceFormProps)=>{
+export const CreateProjectForm=({onCancel}:CreateProjectFormProps)=>{
+    const workspaceId=useWorkspaceId()
     const router=useRouter();
     const inputRef=useRef<HTMLInputElement>(null);
-    const {mutate,isPending}=useCreateWorkspace()
-    const form=useForm<z.infer<typeof createWorkspaceSchema>>({
-        resolver:zodResolver(createWorkspaceSchema),
+    const {mutate,isPending}=useCreateProject()
+    const form=useForm<z.infer<typeof createProjectSchema>>({
+        resolver:zodResolver(createProjectSchema.omit({workspaceId:true})),
         defaultValues:{
             name:"",
-            image:""
+            
            
         }
     })
-    const onSubmit=(values:z.infer<typeof createWorkspaceSchema>)=>{
+    const onSubmit=(values:z.infer<typeof createProjectSchema>)=>{
         const finalValues={
             ...values,
+            workspaceId,
             image:values.image instanceof File ? values.image : "",
 
         }
         mutate({form:finalValues},{
             onSuccess:({data})=>{
-                form.reset();
+                 form.reset();
                    //TODO: Redirect to new workspace
-                   router.push(`/workspaces/${data.$id}`)
+                   router.push(`/workspaces/${workspaceId}/projects/${data.$id}`)
                
                 // onCancel?.()
               
@@ -62,7 +65,7 @@ export const CreateWorkspaceForm=({onCancel}:CreateWorkspaceFormProps)=>{
         <Card className="w-full h-full border-none shadow-none">
             <CardHeader className="flex p-7">
                 <CardTitle className="text-xl font-bold">
-                    Create a new workspace
+                    Create a new project
 
                 </CardTitle>
 
@@ -80,13 +83,14 @@ export const CreateWorkspaceForm=({onCancel}:CreateWorkspaceFormProps)=>{
             
             render={({field})=>(
              <FormItem>
+                <FormLabel>Project Name</FormLabel>
              <FormControl>
 
                 
             <Input
            
         
-            placeholder='Enter workspace name'
+            placeholder='Enter project name'
             {...field}
             />
             
@@ -126,7 +130,7 @@ export const CreateWorkspaceForm=({onCancel}:CreateWorkspaceFormProps)=>{
 
                         )}
                         <div className="flex flex-col">
-                            <p className="text-sm">Workspace Icon</p>
+                            <p className="text-sm">Project Icon</p>
                             <p className="text-sm text-muted-foreground">JPG, PNG, SVG,  or JPEG, max 1MB</p>
 
                              <input
@@ -200,7 +204,7 @@ export const CreateWorkspaceForm=({onCancel}:CreateWorkspaceFormProps)=>{
                 size={"lg"}
                 
                 >
-                  Create Workspace
+                  Create Project
 
                 </Button>
 

@@ -7,7 +7,7 @@ import { getMember } from "../utils"
 import { DATABASE_ID, MEMBERS_ID } from "@/config"
 import { Query } from "node-appwrite"
 import { MemeberRole } from "../types"
-import { error } from "console"
+
 const app =new Hono()
 .get("/",
     sessionMiddleware,
@@ -88,11 +88,13 @@ const app =new Hono()
     }
 ).patch("/:memberId",
     sessionMiddleware,
-    zValidator("json",z.nativeEnum(MemeberRole)),
+    zValidator("json",z.object({role:z.nativeEnum(MemeberRole)})),
     async(c)=>{
+        const {memberId}=c.req.param();
+        const {role}=c.req.valid("json")
         const user=c.get("user");
         const databases=c.get("databases");
-        const {memberId}=c.req.param();
+       
         const memberToUpdate=await databases.getDocument(
             DATABASE_ID,
             MEMBERS_ID,
@@ -116,6 +118,19 @@ const app =new Hono()
 
             
         }
+        if(allMembersInWorkspace.total === 1){
+            return c.json({error:"Cannot downgrade the only member"},400)
+        }
+        await databases.updateDocument(
+            DATABASE_ID,
+            MEMBERS_ID,
+            memberId,
+            {
+                role,
+            }
+        )
+        return c.json({data:{$id:memberToUpdate.$id}})
+
 
     }
 )

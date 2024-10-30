@@ -53,17 +53,11 @@ interface GetWorkspaceProps{
     workspaceId:string
 }
 export const getWorkspace=async({workspaceId}:GetWorkspaceProps)=>{
-    try{
+    
         const {account,databases}= await createSessionClient();
 
     
-        // const client=new Client()
-        // .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-        // .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
-        // const session= await cookies().get(AUTHCOOKIE)
-        // if(!session) return null;
-        // client.setSession(session.value)
-        // const account= new Account(client);
+      
         const user = await account.get();
 
         // const databases= new Databases(client);
@@ -74,7 +68,7 @@ export const getWorkspace=async({workspaceId}:GetWorkspaceProps)=>{
             workspaceId
         })
         if(!member){
-            return null;
+            throw new Error("Unauthorized");
         }
         const workspace=await databases.getDocument<Workspace>(
             DATABASE_ID,
@@ -82,9 +76,7 @@ export const getWorkspace=async({workspaceId}:GetWorkspaceProps)=>{
             workspaceId
         )
         return workspace;
-        }catch{
-            return null;
-        }
+      
     
 }
 interface GetWorkspaceInfoProps{
