@@ -83,7 +83,7 @@ interface GetWorkspaceInfoProps{
     workspaceId:string
 }
 export const getWorkspaceInfo=async({workspaceId}:GetWorkspaceInfoProps)=>{
-    try{
+    
         const {account,databases}= await createSessionClient();
         const wordspace=await databases.getDocument<Workspace>(
             DATABASE_ID,
@@ -94,7 +94,5 @@ export const getWorkspaceInfo=async({workspaceId}:GetWorkspaceInfoProps)=>{
             name:wordspace.name
         }
 
-    }catch{
-        return null
-    }
+   
 }
