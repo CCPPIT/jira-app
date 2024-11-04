@@ -6,7 +6,7 @@ import { getMember } from "@/features/members/utils";
 import { DATABASE_ID, MEMBERS_ID, PROJECT_ID, TASKS_ID } from "@/config";
 import { ID, Query } from "node-appwrite";
 import { z } from "zod";
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import { createAdminClinet } from "@/lib/appwrite";
 import { Project } from "@/features/projects/types";
 
@@ -28,9 +28,11 @@ const app =new Hono()
         const user=c.get("user");
         const {
             workspaceId,
-            assigneeId,
-            status,
             projectId,
+            
+            status,
+            assigneeId,
+            
             search,
             dueDate,
 
@@ -67,7 +69,7 @@ const app =new Hono()
             console.log("search",search);
             query.push(Query.search("name",search))
         }
-        const tasks=await databases.listDocuments(
+        const tasks=await databases.listDocuments<Task>(
             DATABASE_ID,
             TASKS_ID,
             query
@@ -78,7 +80,8 @@ const app =new Hono()
         const projects=await databases.listDocuments<Project>(
             DATABASE_ID,
             PROJECT_ID,
-            projectIds.length>0 ?[Query.contains("$id",projectIds)]:[]
+            
+            projectIds.length>0 ? [Query.contains("$id",projectIds)]:[]
 
 
         );
@@ -91,7 +94,7 @@ const app =new Hono()
         );
         const assignees=await Promise.all(
             members.documents.map(async(member)=>{
-                const user=await users.get(member.$id);
+                const user=await users.get(member.userId);
                 return {
                     ...member,
                     name:user.name,
