@@ -19,37 +19,39 @@ import { useWorkspaceId } from "@/features/workspaces/hooks/use-workspace-id";
 import DatePicker from "./date-picker";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import MemberAvatar from "@/features/members/components/member-avatar";
-import { TaskStatus } from "../types";
+import { Task, TaskStatus } from "../types";
 import ProjectAvatar from "@/features/projects/components/project-avatar";
+import { useUpdateTask } from "../api/use-update-task";
 
-interface CreateTaskFormProps{
-    onCancel?:()=>void,
-    projectOptions:{id:string,name:string,imageUrl:string}[],
-    memberOptions:{id:string,name:string}[],
+interface EditTaskFormProps{
+    onCancel?:()=>void;
+    projectOptions:{id:string,name:string,imageUrl:string}[];
+    memberOptions:{id:string,name:string}[];
+    initialValues:Task
 }
-export const CreateTaskForm=({onCancel,projectOptions,memberOptions}:CreateTaskFormProps)=>{
+export const EditTaskForm=({onCancel,projectOptions,memberOptions,initialValues}:EditTaskFormProps)=>{
     const router=useRouter();
     const workspaceId=useWorkspaceId()
     const inputRef=useRef<HTMLInputElement>(null);
-    const {mutate,isPending}=useCreateTask()
+    const {mutate,isPending}=useUpdateTask()
     const form=useForm<z.infer<typeof createTaskSchema>>({
-        resolver:zodResolver(createTaskSchema.omit({workspaceId:true})),
+        resolver:zodResolver(createTaskSchema.omit({workspaceId:true,description:true})),
         defaultValues:{
-            workspaceId,
+           ...initialValues,
+           dueDate:initialValues.dueDate?new Date(initialValues.dueDate):undefined
             
            
         }
     });
     const onSubmit=(values:z.infer<typeof createTaskSchema>)=>{
       
-        mutate({json:{...values,workspaceId}},{
+        mutate({json:values,param:{taskId:initialValues.$id}},{
 
             onSuccess:()=>{
                  form.reset();
                    //TODO: Redirect to new tasks
-                //    router.push(`/workspaces/${workspaceId}/tasks/${data.$id}`)
                
-                // onCancel?.()
+                onCancel?.()
               
             }
         }
@@ -68,7 +70,7 @@ export const CreateTaskForm=({onCancel,projectOptions,memberOptions}:CreateTaskF
         <Card className="w-full h-full border-none shadow-none">
             <CardHeader className="flex p-7">
                 <CardTitle className="text-xl font-bold">
-                    Create a new task
+                    Edit a  task
 
                 </CardTitle>
 
@@ -277,7 +279,7 @@ export const CreateTaskForm=({onCancel,projectOptions,memberOptions}:CreateTaskF
                 size={"lg"}
                 
                 >
-                  Create Task
+                  Save Changes
 
                 </Button>
 
