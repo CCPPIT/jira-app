@@ -8,11 +8,12 @@ export enum TaskStatus{
     DONE="DONE",
 }
 export type Task =Models.Document &{
+  
     name:string,
     status:TaskStatus,
     projectId:string,
     assigneeId:string,
-    workspaceId:string,
+    // workspaceId:string,
     position:number,
     dueDate:string
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { Task, TaskStatus } from '../types'
 import {DragDropContext, Draggable, Droppable, DropResult}from "@hello-pangea/dnd"
 import KanBanColumnHeader from './kanban-column-header'
@@ -6,6 +6,7 @@ import KanBanCard from './kanban-card'
 
 interface Props {
     data:Task[]
+    onChange:(tasks:{$id:string,status:TaskStatus,position:number}[])=>void
 }
 const boards:TaskStatus[]=[
     TaskStatus.BACKLOG,
@@ -18,7 +19,7 @@ type TaskState={
     [key in TaskStatus]:Task[]
 }
 
-const DataKanBan = ({data}: Props) => {
+const DataKanBan = ({data,onChange}: Props) => {
     const [tasks,setIsTask]=useState<TaskState>(()=>{
         const initialTasks:TaskState={
             [TaskStatus.BACKLOG]:[],
@@ -35,6 +36,22 @@ const DataKanBan = ({data}: Props) => {
         });
         return initialTasks;
     })
+    useEffect(()=>{
+        const newTasks:TaskState={
+            [TaskStatus.BACKLOG]:[],
+            [TaskStatus.DONE]:[],
+            [TaskStatus.IN_PROGRESS]:[],
+            [TaskStatus.IN_REVIEW]:[],
+            [TaskStatus.TODO]:[]
+        };
+        data.forEach((task)=>{
+            newTasks[task.status].push(task)
+        });
+        Object.keys(newTasks).forEach((status)=>{
+            newTasks[status as TaskStatus].sort((a,b)=>a.position - b.position);
+        });
+        setIsTask(newTasks)
+    },[data])
     const onDragEnd=useCallback((result:DropResult)=>{
         if(!result.destination)return;
         const {source,destination}=result;
@@ -100,8 +117,9 @@ const DataKanBan = ({data}: Props) => {
           }
           return newTasks
 
-        })
-    },[])
+        });
+        onChange(updatePayload)
+    },[onChange])
   return (
     <DragDropContext onDragEnd={onDragEnd}>
         <div className='flex overflow-x-auto'>

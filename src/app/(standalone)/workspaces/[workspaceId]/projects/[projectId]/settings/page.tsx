@@ -18,6 +18,9 @@ const ProjectIdSettingPage =async ({params}: Props) => {
    const  initaiValues=await getProject({
     projectId:params.projectId
    })
+//    if(!initaiValues){
+//     throw new Error("Project not found")
+//    }
   return (
     <div className='w-full lg:max-w-xl'>
         <UpdateProjectForm initialValues={initaiValues}/>

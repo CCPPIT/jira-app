@@ -33,7 +33,7 @@ const SignInCard = (props: Props) => {
     }
   return (
 
-    <Card className=' h-full md:w-[487px] border-none shadow-none px-7'>
+    <Card className='h-full md:w-[487px] border-none shadow-none px-7'>
     <CardHeader className='flex items-center justify-center text-center'>
         <CardTitle className='text-2xl'>
             Welcome Back!

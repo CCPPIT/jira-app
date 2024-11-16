@@ -120,7 +120,7 @@ const app =new Hono()
         }else{
             uploadedImageUrl=image
         }
-        const workspace=await databases.updateDocument(
+        const workspace=await databases.updateDocument(  
             DATABASE_ID,
             WORKSPACES_ID,
             workspaceId,
