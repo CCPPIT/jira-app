@@ -12,7 +12,7 @@ type Props = {
     hideProjectFilter?:boolean
 }
 
-const DataFilters = (props: Props) => {
+const DataFilters = ({hideProjectFilter}: Props) => {
     const workspaceId=useWorkspaceId();
     const {data:projects,isLoading:isLoadingProject}=useGetProjects({workspaceId})
     const {data:members,isLoading:isLoadingMembers}=useGetMembers({workspaceId})
@@ -74,6 +74,7 @@ const DataFilters = (props: Props) => {
             </SelectContent>
         </Select>
         {/**Assignee */}
+
         <Select
          defaultValue={assigneeId?? undefined}
         onValueChange={(value)=>onAssigneeChange(value)}
@@ -96,6 +97,9 @@ const DataFilters = (props: Props) => {
             </SelectContent>
         </Select>
         {/** Project */}
+        {!hideProjectFilter&&(
+
+       
         <Select
          defaultValue={projectId?? undefined}
         onValueChange={(value)=>onProjectChange(value)}
@@ -117,6 +121,7 @@ const DataFilters = (props: Props) => {
                 ))}
             </SelectContent>
         </Select>
+         )}
         <DatePicker
         placehilder='Due Date'
         value={dueDate?new Date(dueDate):undefined}

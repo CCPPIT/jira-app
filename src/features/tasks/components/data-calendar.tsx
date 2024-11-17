@@ -14,6 +14,8 @@ import {
     
 }from "date-fns"
 import {enUS} from 'date-fns/locale/en-US'
+import EventCard from './event-card'
+import CustomToolBar from './customtoolbar'
 const locales = {
     'en-US': enUS,
   }
@@ -71,6 +73,22 @@ const DataCalendar = ({data}: Props) => {
           // استخدام localizer لتنسيق التاريخ، إذا كان موجودًا
           localizer?.format(date, "EEE", culture) ?? "" // إذا لم يكن localizer موجودًا، استخدم سلسلة فارغة
       }}
+      components={{
+        eventWrapper:({event})=>(
+          <EventCard
+          title={event.title}
+          assignee={event.assignee}
+          project={event.project}
+          status={event.status}
+          id={event.id}
+          />
+
+        ),
+        toolbar:()=>(
+          <CustomToolBar date={value} onNavigat={handleNavigate}/>
+        )
+      }}
+      
       />
     </div>
   )

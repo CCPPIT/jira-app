@@ -16,10 +16,15 @@ import DataKanBan from './data-kanban'
 import { TaskStatus } from '../types'
 import { useBulkUpdateTasks } from '../api/use-bulk-update-tasks'
 import DataCalendar from './data-calendar'
+import './data-calendar.css'
 
-type Props = {}
+type Props = {
+    hideProjectFilter?:boolean
 
-const TaskViewSwitcher = (props: Props) => {
+}
+
+
+const TaskViewSwitcher = ({hideProjectFilter}: Props) => {
     const [{status,projectId,assigneeId,dueDate,search},setFilters]=useTaskFilters()
     const {mutate:blukupdate}=useBulkUpdateTasks();
     const [view,setView]=useQueryState("task-view",{
@@ -78,7 +83,7 @@ const TaskViewSwitcher = (props: Props) => {
 
             </div>
             <Separator className='my-4'/>
-            <DataFilters/>
+            <DataFilters hideProjectFilter={hideProjectFilter}/>
             <Separator className='my-4'/>
             {isLoadingTasks?(
                 <div className='w-full border rounded-lg h-[200px] flex flex-col items-center justify-center'>
